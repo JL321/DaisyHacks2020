@@ -2,11 +2,11 @@
 #global unit_set
 #global unit_promo_price
 
-def offers(ad_str):
+def offers(ad_str, unit_set):
     ad_str = ad_str.lower()
     ad_lines = ad_str.split("\n")
 
-    offer_unit = str()
+    offer_unit = ""
     offer_val = 0
 
     # MAIN vars that will go in the output csv     
@@ -38,19 +38,17 @@ def offers(ad_str):
             if "%" in line:
                 for letter in line:                     #just keep numbers and special chars (becz of . in 1.5)
                     if (letter.isalpha()):
-                        line.replace(letter, "")
-                line.replace("%", "")
+                        line = line.replace(letter, "")
+                line = line.replace("%", "")
                 discount += float(line)/100
 
 
             elif "$" in line:
                 for letter in line:                     #just keep numbers and special chars (becz of . in 1.5)
                     if (letter.isalpha()):
-                        line.replace(letter, "")
-                line.replace("%", "")
+                        line = line.replace(letter, "")
+                line = line.replace("%", "")
                 save_per_unit = float(line)
-
-
                 break
 
 
@@ -58,11 +56,9 @@ def offers(ad_str):
             elif "¢" in line:
                 for letter in line:                     #just keep numbers and special chars (becz of . in 1.5)
                     if (letter.isalpha()):
-                        line.replace(letter, "")
-                line.replace("%", "")
+                        line = line.replace(letter, "")
+                line = line.replace("%", "")
                 save_per_unit = float(line)/100
-
-
                 break                
         
                     
@@ -88,13 +84,13 @@ def offers(ad_str):
                 for k in range(0, i+2):      #before "on" part
                     
                     if (line[k].isalpha()):
-                        line.replace(line[k],"")
+                        line = line.replace(line[k],"")
                     
                 if "$" in line: 
-                    line.replace("$", "")    
+                    line = line.replace("$", "")    
                     amt =  float(line)
                 elif "¢" in line:
-                    line.replace("¢", "")
+                    line = line.replace("¢", "")
                     amt = float(line)/100
 
                 
@@ -113,7 +109,6 @@ def offers(ad_str):
 
                 uom = line[(i+1):len(line)]
 
-                line.remove()
 
                 for k in range(i+1, len(line)):      #after "on" part 
                     if (line[k].isnumeric()):      # isnumeric becuase no. of units always integer
@@ -123,13 +118,13 @@ def offers(ad_str):
 
                 for k in range(0, i+1):      #before "on" part     
                     if (line[k].isalpha()):
-                        line.replace(line[k],"")        
+                        line = line.replace(line[k],"")        
 
                 if "$" in line: 
-                    line.replace("$", "")    
+                    line = line.replace("$", "")    
                     amt =  float(line)
                 elif "¢" in line:
-                    line.replace("¢", "")
+                    line = line.replace("¢", "")
                     amt = float(line)/100
 
                 least_unit_for_promo = on if not(least_unit_for_promo) else float()
@@ -155,13 +150,13 @@ def offers(ad_str):
                 for k in range(0, i+5):      #before "on" part
                     
                     if (line[k].isalpha()):
-                        line.replace(line[k],"")
+                        line = line.replace(line[k],"")
                     
                 if "$" in line: 
-                    line.replace("$", "")    
-                    amt =  float(line)
+                    line = line.replace("$", "")    
+                    amt = float(line)
                 elif "¢" in line:
-                    line.replace("¢", "")
+                    line = line.replace("¢", "")
                     amt = float(line)/100
                 
                 least_unit_for_promo = on if not(least_unit_for_promo) else float()
@@ -175,13 +170,13 @@ def offers(ad_str):
 
                 for k in range(0, len(line)):      #before "on" part     
                     if (line[k].isalpha()):             
-                        line.replace(line[k],"")        
+                        line = line.replace(line[k],"")        
 
                 if "$" in line: 
-                    line.replace("$", "")    
+                    line = line.replace("$", "")    
                     amt =  float(line)
                 elif "¢" in line:
-                    line.replace("¢", "")
+                    line = line.replace("¢", "")
                     amt = float(line)/100
 
                 least_unit_for_promo = on if not(least_unit_for_promo) else float()
@@ -216,20 +211,20 @@ def offers(ad_str):
             break  
 
 
-              
+
         # Price Identification ########################################################################################
         else:
-            if "$" in line:
+
+            if "¢" in line:
                 for k in line:
-                    if (k.isalpha() or k == "$"):
-                        line.replace(k,"")
+                    if k.isalpha() or (k == "¢"):
+                        line = line.replace(k, "")
                 unit_promo_price = float(line)
             
-            
-            elif "¢" in line:
+            elif "$" in line:
                 for k in line:
-                    if (k.isalpha() or k == "¢"):
-                        line.replace(k,"")
+                    if (k.isalpha() or k == "$"):
+                        line = line.replace(k, "")
                 unit_promo_price = float(line)
 
 
@@ -241,8 +236,9 @@ def offers(ad_str):
     return(unit_promo_price, save_per_unit, uom, discount, least_unit_for_promo)
 
 def line_units(ad_line, unit_set):
-    
-    for i in ad_line:
+    for i in ad_line.split():
         if i in unit_set:
             return i
+
+
 
