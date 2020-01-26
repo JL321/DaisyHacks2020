@@ -47,6 +47,7 @@ def get_document_bounds(image_file, feature):
         for block in page.blocks:
             if (feature == FeatureType.BLOCK):
                 bounds.append(block.bounding_box)
+                print(block)
 
     # The list `bounds` contains the coordinates of the bounding boxes.
     return bounds

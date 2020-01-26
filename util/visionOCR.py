@@ -186,7 +186,7 @@ def render_doc_text(filein, fileout, fileoutRef='default.jpg', thresh=500):
             
     print(len(blockContainerL))
     finalBoxes = []  # Elements in the form ((lx, ly), (tx, ty))
-    # Basically the bottom left and right left corners- refer to meshBlock func
+    # Basically the bottom left and top right corners- refer to meshBlock func
     
     for container in blockContainerL:
         finalBoxes.append(container.meshBlock())
