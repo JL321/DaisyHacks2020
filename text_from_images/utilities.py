@@ -16,7 +16,7 @@ def find_prodname_and_org(string, prod2cased):
         org = 1
     string = " ".join(good_words)
     top_token = process.extract(string, list(prod2cased.keys()))
-    if top_token:
+    if int(top_token[0][1]) > 80:
         return (prod2cased[top_token[0][0]][1], org)
     else:
         return ("", org)
