@@ -3,6 +3,7 @@ import os
 from fuzzywuzzy import process
 from google.cloud import vision
 import io
+
 def find_prodname_and_org(string, prod2cased):
     '''returns a tuple in the form of (cased_string, organic)
     '''
@@ -14,15 +15,17 @@ def find_prodname_and_org(string, prod2cased):
     if "organic" in good_words:
         org = 1
     string = " ".join(good_words)
-    print(string)
     top_token = process.extract(string, list(prod2cased.keys()))
     if top_token:
-        return (prod2cased[top_token[0][0]], org)
+        return (prod2cased[top_token[0][0]][1], org)
     else:
         return ("", org)
 
 def fetch_text(path):
     """Detects text in the file. returns a string"""
+    import io
+    import os
+    os.system("set GOOGLE_APPLICATION_CREDENTIALS=C:/Users/runze/OneDrive/Desktop/textdetector-f1de5e1e531e.json")
     client = vision.ImageAnnotatorClient()
 
     with io.open(path, 'rb') as image_file:
