@@ -139,6 +139,8 @@ def get_document_bounds(image_file, feature):
 
 
 def render_doc_text(filein, fileout, fileoutRef='default.jpg', thresh=500):
+    
+    # Thresh represents the threshold for combining individual bboxes
     image = Image.open(filein)
     bounds = get_document_bounds(filein, FeatureType.BLOCK)
     draw_boxes(image, bounds, 'blue')
@@ -178,12 +180,14 @@ def render_doc_text(filein, fileout, fileoutRef='default.jpg', thresh=500):
                         sectBool = False
                         break
                     
-        if sectBool:
+        if sectBool: # Set self as blockContainer if nothing else
             blockContainerL.append(blockContainer(bounds[boundIdx1]))
             del bounds[boundIdx1]
             
     print(len(blockContainerL))
-    finalBoxes = []
+    finalBoxes = []  # Elements in the form ((lx, ly), (tx, ty))
+    # Basically the bottom left and right left corners- refer to meshBlock func
+    
     for container in blockContainerL:
         finalBoxes.append(container.meshBlock())
     print("Box Length: {}".format(len(finalBoxes)))
@@ -193,7 +197,8 @@ def render_doc_text(filein, fileout, fileoutRef='default.jpg', thresh=500):
         image.save(fileout)
     else:
         image.show()
-
+    
+    return finalBoxes
 
 def rect_distance(bbox1, bbox2):
 
